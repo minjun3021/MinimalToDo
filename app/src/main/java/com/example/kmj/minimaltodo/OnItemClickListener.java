@@ -6,5 +6,6 @@ public interface OnItemClickListener {
     void onDeleteClickListener(int i);
 
     void onEditClickListener(int i);
-/*    void onListClickListener(int i);*/
+
+    void onItemClick(int i);
 }

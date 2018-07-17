@@ -2,11 +2,12 @@ package com.example.kmj.minimaltodo;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Parcelable;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.gson.Gson;
@@ -42,6 +43,17 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
 
             }
         });
+
+
+    }
+
+    @Override
+    public void onItemClick(int i) {
+        Intent intent = new Intent(MainActivity.this, ViewActivity.class);
+        intent.putExtra("main", data.get(i).getMaintext());
+        intent.putExtra("sub", data.get(i).getSubtext());
+        intent.putExtra("extra", data.get(i).getExtra());
+        startActivity(intent);
     }
 
     @Override
@@ -68,8 +80,8 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
                 content = data.getStringExtra("content");
                 position = data.getIntExtra("position", 0);
                 this.data.get(position).setMaintext(mainText);
-                this.data.get(position).setSubtext(mainText);
-                this.data.get(position).setExtra(mainText);
+                this.data.get(position).setSubtext(subText);
+                this.data.get(position).setExtra(content);
                 mAdapter.notifyDataSetChanged();
                 saveData();
             }
@@ -86,6 +98,9 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
     @Override
     public void onEditClickListener(int i) {
         Intent intent = new Intent(this, SubActivity.class);
+        mainText = data.get(i).getMaintext();
+        subText = data.get(i).getSubtext();
+        content = data.get(i).getExtra();
         intent.putExtra("main", mainText);
         intent.putExtra("sub", subText);
         intent.putExtra("content", content);
@@ -94,15 +109,6 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
         startActivityForResult(intent, 2);
     }
 
-/*    @Override
-    public void onListClickListener(int i) {
-        Intent intent = new Intent(this, ViewActivity.class);
-        intent.putExtra("main", data.get(i).getMaintext());
-        intent.putExtra("sub", data.get(i).getSubtext());
-        intent.putExtra("content", data.get(i).getExtra());
-        startActivity(intent);
-
-    }*/
 
     public void saveData() {
         SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
@@ -123,4 +129,5 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
             data.addAll(shareditems);
         }
     }
+
 }
